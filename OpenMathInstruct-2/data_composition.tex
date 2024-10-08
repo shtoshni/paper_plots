@@ -1,0 +1,38 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage[dvipsnames]{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc}
+\definecolor{NvidiaGreen}{RGB}{118, 185, 0}
+
+\begin{document}
+\begin{tikzpicture}[
+    box/.style={draw, rectangle, minimum width=3cm, minimum height=1cm, align=center, rounded corners=5pt},
+    small box/.style={draw, rectangle, minimum width=2cm, minimum height=0.7cm, align=center, rounded corners=3pt},
+    arrow/.style={-Stealth, thick}
+]
+% Right column boxes with new arrangement
+\node[box] (aa1) {Solution\\Augmentation};
+\node[box, below=0.5cm of aa1] (qaa1) {Question-Solution\\Augmentation};
+\node[box, below=0.5cm of qaa1] (qaa2) {Question-Solution\\Augmentation};
+\node[box, below=0.5cm of qaa2] (aa2) {Solution\\Augmentation};
+% Left column boxes, aligned with the second and third rows
+\node[small box, fill=lightgray, left=3cm of qaa1] (math) {MATH};
+\node[small box, fill=lightgray, left=3cm of qaa2] (gsm8k) {GSM8K};
+% Box in the third column
+\node[box, right=2cm of qaa1.east, yshift=-0.75cm] (remove) {Decontamination\\with Test Sets};
+% Box in the fourth column
+\node[box, right=2cm of remove, fill=NvidiaGreen] (final) {\textbf{OpenMathInstruct-2}\\(14M)};
+% All arrows adjusted to start/end at the middle of boxes
+\draw[arrow] (math.east) -- (aa1.west);
+\draw[arrow] (math.east) -- (qaa1.west);
+\draw[arrow] (gsm8k.east) -- (qaa2.west);
+\draw[arrow] (gsm8k.east) -- (aa2.west);
+\draw[arrow] (qaa1.east) --  ($(remove.west)!0.5!(remove.north west)$) node[sloped, midway, above] {9.9M};
+\draw[arrow] (qaa2.east) -- ($(remove.west)!0.5!(remove.south west)$)  node[sloped, midway, below] {2.1M};
+\draw[arrow] (aa1.east) -- (final.north) node[sloped, midway, above] {2.5M};
+\draw[arrow] (aa2.east) -- (final.south) node[sloped, midway, below] {0.5M};
+% Two straight horizontal arrows from "remove" to "final"
+\draw[arrow] ($(remove.east)!0.5!(remove.north east)$) -- ($(final.west)!0.5!(final.north west)$) node[midway, above] {8.9M};
+\draw[arrow] ($(remove.east)!0.5!(remove.south east)$) -- ($(final.west)!0.5!(final.south west)$) node[midway, below] {2.1M};
+\end{tikzpicture}
+\end{document}
